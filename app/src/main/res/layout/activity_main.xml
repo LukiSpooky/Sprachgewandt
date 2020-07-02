@@ -42,7 +42,7 @@
         android:id="@+id/titel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Titel"
+        android:text="Sprachgewandt"
         android:textSize="36sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

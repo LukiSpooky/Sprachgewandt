@@ -13,10 +13,10 @@ public class OptionenActivity extends AppCompatActivity {
 
     ImageView home;
     Intent homeIntent;
-    ImageButton grau;
-    ImageButton weiss;
-    ImageButton blau;
-    ImageButton gelb;
+    ImageView grau;
+    ImageView weiss;
+    ImageView blau;
+    ImageView gelb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +24,10 @@ public class OptionenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_optionen);
 
         home = (ImageView) findViewById(R.id.home);
-        grau = (ImageButton) findViewById(R.id.grau);
-        weiss = (ImageButton) findViewById(R.id.weiss);
-        blau = (ImageButton) findViewById(R.id.blau);
-        gelb = (ImageButton) findViewById(R.id.gelb);
+        grau = (ImageView) findViewById(R.id.grau);
+        weiss = (ImageView) findViewById(R.id.weiss);
+        blau = (ImageView) findViewById(R.id.blau);
+        gelb = (ImageView) findViewById(R.id.gelb);
 
         home.setOnClickListener(new View.OnClickListener(){
             @Override
