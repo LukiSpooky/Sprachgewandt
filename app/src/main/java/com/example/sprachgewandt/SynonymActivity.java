@@ -10,6 +10,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class SynonymActivity extends AppCompatActivity {
 
     ImageView home = null;
@@ -20,6 +28,9 @@ public class SynonymActivity extends AppCompatActivity {
     TextView synAusgabe = null;
     String synonym = null; //Die API wird den Wert hier abspeichern
     Intent homeIntent;
+    String synUserEingabe;
+    String url;
+    private RequestQueue queue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +43,7 @@ public class SynonymActivity extends AppCompatActivity {
         synEingabe = (EditText) findViewById(R.id.synEingabe);
         synTitel = (TextView) findViewById(R.id.synTitel);
         synAusgabe = (TextView) findViewById(R.id.synAusgabe);
+
 
         synEingabe.setHint("Wort Eingeben");
 
@@ -48,7 +60,9 @@ public class SynonymActivity extends AppCompatActivity {
         synSuchen.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                //Synonym API
+               synUserEingabe = synEingabe.getText().toString();
+               url = "https://words.bighugelabs.com/api/2/88a6b016f1c8db6307c9d2b49e4c4616/" + synUserEingabe +"/json";
+                getSynonym();
             }
 
 
@@ -56,5 +70,32 @@ public class SynonymActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void getSynonym(){
+        StringRequest stringRequest = new StringRequest
+                (Request.Method.GET, url, new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonStream = new JSONObject(response.toString());
+                            System.out.println(response.toString());
+                            synAusgabe.setText("Ausgabe: " + jsonStream.get("value").toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        synAusgabe.setText("RIP! No Synonym geladen :(");
+                    }
+                });
+
+
+        this.queue.add(stringRequest);
     }
 }
