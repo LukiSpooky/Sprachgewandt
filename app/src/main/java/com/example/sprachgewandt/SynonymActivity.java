@@ -11,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +38,7 @@ public class SynonymActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_synonym);
+        this.queue = Volley.newRequestQueue(this);
 
         home = (ImageView) findViewById(R.id.home);
         synText = (TextView) findViewById(R.id.synText);
@@ -44,7 +47,7 @@ public class SynonymActivity extends AppCompatActivity {
         synTitel = (TextView) findViewById(R.id.synTitel);
         synAusgabe = (TextView) findViewById(R.id.synAusgabe);
 
-
+        synEingabe.setText("");
         synEingabe.setHint("Wort Eingeben");
 
         home.setOnClickListener(new View.OnClickListener(){
@@ -60,8 +63,8 @@ public class SynonymActivity extends AppCompatActivity {
         synSuchen.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-               synUserEingabe = synEingabe.getText().toString();
-               url = "https://words.bighugelabs.com/api/2/88a6b016f1c8db6307c9d2b49e4c4616/" + synUserEingabe +"/json";
+                synUserEingabe = synEingabe.getText().toString();
+                url = "https://words.bighugelabs.com/api/2/88a6b016f1c8db6307c9d2b49e4c4616/" + synUserEingabe +"/json";
                 getSynonym();
             }
 
@@ -72,7 +75,7 @@ public class SynonymActivity extends AppCompatActivity {
 
     }
 
-    public void getSynonym(){
+    private void getSynonym(){
         StringRequest stringRequest = new StringRequest
                 (Request.Method.GET, url, new Response.Listener<String>() {
 
@@ -80,11 +83,19 @@ public class SynonymActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonStream = new JSONObject(response.toString());
-                            System.out.println(response.toString());
-                            synAusgabe.setText("Ausgabe: " + jsonStream.get("value").toString());
+                            System.out.println("TRY SCHLAUFE" + jsonStream.toString());
+                            synAusgabe.setText("Ausgabe: " + jsonStream.getString("syn"));
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            System.out.println("STACK TRACE");
+
+                        } catch (NullPointerException e){
+                            System.out.println("NULL POINTER");
+                            synAusgabe.setText("RIP! Nullpointer.");
+
                         }
+
+
                     }
                 }, new Response.ErrorListener() {
 
@@ -94,8 +105,7 @@ public class SynonymActivity extends AppCompatActivity {
                         synAusgabe.setText("RIP! No Synonym geladen :(");
                     }
                 });
-
-
         this.queue.add(stringRequest);
+
     }
 }
