@@ -32,6 +32,8 @@ public class SynonymActivity extends AppCompatActivity {
     Intent homeIntent;
     String synUserEingabe;
     String url;
+    Button neueSuche;
+    TextView hinweis;
     private RequestQueue queue;
 
     @Override
@@ -46,9 +48,14 @@ public class SynonymActivity extends AppCompatActivity {
         synEingabe = (EditText) findViewById(R.id.synEingabe);
         synTitel = (TextView) findViewById(R.id.synTitel);
         synAusgabe = (TextView) findViewById(R.id.synAusgabe);
+        neueSuche = (Button) findViewById(R.id.neueSuche);
+        hinweis = (TextView) findViewById(R.id.hinweis);
 
         synEingabe.setText("");
         synEingabe.setHint("Wort Eingeben");
+
+        synAusgabe.setVisibility(View.INVISIBLE);
+        neueSuche.setVisibility(View.INVISIBLE);
 
         home.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -71,6 +78,21 @@ public class SynonymActivity extends AppCompatActivity {
 
         });
 
+        neueSuche.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                synAusgabe.setVisibility(View.INVISIBLE);
+                synText.setVisibility(View.VISIBLE);
+                synSuchen.setVisibility(View.VISIBLE);
+                neueSuche.setVisibility(View.INVISIBLE);
+                synEingabe.setVisibility(View.VISIBLE);
+                hinweis.setVisibility(View.VISIBLE);
+                synEingabe.setText("");
+            }
+
+
+        });
+
 
 
     }
@@ -84,14 +106,17 @@ public class SynonymActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonStream = new JSONObject(response.toString());
                             System.out.println("TRY SCHLAUFE" + jsonStream.toString());
-                            synAusgabe.setText("Ausgabe: " + jsonStream.getString("syn"));
+                            JSONObject jsonStream2 = new JSONObject(jsonStream.get("noun").toString());
+
+                            synAusgabe.setVisibility(View.VISIBLE);
+                            synText.setVisibility(View.INVISIBLE);
+                            synSuchen.setVisibility(View.INVISIBLE);
+                            neueSuche.setVisibility(View.VISIBLE);
+                            synEingabe.setVisibility(View.INVISIBLE);
+                            hinweis.setVisibility(View.INVISIBLE);
+                            synAusgabe.setText("Ausgabe: " + jsonStream2.get("syn"));
                         } catch (JSONException e) {
                             e.printStackTrace();
-                            System.out.println("STACK TRACE");
-
-                        } catch (NullPointerException e){
-                            System.out.println("NULL POINTER");
-                            synAusgabe.setText("RIP! Nullpointer.");
 
                         }
 
@@ -108,4 +133,8 @@ public class SynonymActivity extends AppCompatActivity {
         this.queue.add(stringRequest);
 
     }
+
+
 }
+
+

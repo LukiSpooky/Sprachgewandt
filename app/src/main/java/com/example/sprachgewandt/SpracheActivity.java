@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.HttpResponse;
+
 import org.w3c.dom.Text;
 
 public class SpracheActivity extends AppCompatActivity {
@@ -49,8 +51,16 @@ public class SpracheActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Sprache API
+                erkenneSprache();
             }
         });
 
     }
+
+    public void erkenneSprache(){
+
+    }
+
+
+
 }
